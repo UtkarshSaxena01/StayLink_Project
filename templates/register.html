@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - Airbnb Style</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='auth.css') }}">
+
+</head>
+<body class="airbnb-theme">
+    <div class="auth-container">
+        <h2>Create Your Account</h2>
+        <form class="auth-form" action="/register" method="POST">
+            <input type="text" name="name" placeholder="Full Name" required>
+            <input type="email" name="email" placeholder="Email address" required>
+            <input type="password" name="password" placeholder="Password" required>
+            <button type="submit" class="primary-btn">Register</button>
+            <p>Already have an account?<a href="{{ url_for('login') }}">Log in</a>
+            </p>
+        </form>
+    </div>
+</body>
+</html>

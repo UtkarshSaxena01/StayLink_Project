@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StayLink - Booking</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+    function toggleTheme() {
+        document.body.classList.toggle("dark");
+        localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    }
+
+    window.onload = () => {
+        if (localStorage.getItem("theme") === "dark") {
+            document.body.classList.add("dark");
+        }
+    }
+    </script>
+</head>
+<body>
+<header>
+    <div class="logo">StayLink</div>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+</header>
+<main>
+
+    <h2>Manage Bookings</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Check-in</th>
+                <th>Check-out</th>
+                <th>Guests</th>
+                <th>Type of Room</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for booking in bookings %}
+            <tr>
+                <td>{{ booking.id }}</td>
+                <td>{{ booking.name }}</td>
+                <td>{{ booking.email }}</td>
+                <td>{{ booking.check_in }}</td>
+                <td>{{ booking.check_out }}</td>
+                <td>{{ booking.guests }}</td>
+                <td>{{ booking.type_of_room }}</td>
+                <td>
+                    <form action="/delete_booking/{{ booking.id }}" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</main>
+</body>
+</html>
