@@ -16,10 +16,16 @@ db_config = {
 def get_db_connection():
     return mysql.connector.connect(**db_config)
 
+is_login = False
+
 # ---------------------- AUTH ROUTES ---------------------- #
 @app.route('/')
 def home():
-    return redirect('/login')
+    global is_login
+    if not is_login:
+        return redirect('/login')
+    else:
+        return render_template('index_user.html')
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -45,6 +51,7 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    global is_login
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -58,7 +65,8 @@ def login():
         if user:
             session['user_id'] = user['id']
             session['user_name'] = user['name']
-            return redirect('/admin')
+            is_login = True
+            return redirect('/')
         else:
             flash("Invalid credentials. Please try again.")
             return redirect('/login')
@@ -78,9 +86,9 @@ def index_user():
     cursor.execute("SELECT * FROM bookings")
     bookings = cursor.fetchall()
     conn.close()
-    return render_template('index_user.html', bookings=bookings)
+    return render_template('index_admin.html', bookings=bookings)
 
-@app.route('/book', methods=['POST'])
+@app.route('/book', methods=['GET', 'POST'])
 def book():
     name = request.form['name']
     email = request.form['email']
@@ -91,7 +99,18 @@ def book():
 
     conn = get_db_connection()
     cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO bookings (name, email, check_in, check_out, guests, type_of_room) VALUES (%s, %s, %s, %s, %s, %s)",
-        (name, email, check_in, check_out, guests, type_of_room)
-    )
+    try:
+        cursor.execute(
+            "INSERT INTO bookings (name, email, check_in, check_out, guest, type_of_room) VALUES (%s, %s, %s, %s, %s, %s)",
+            (name, email, check_in, check_out, guests, type_of_room)
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    return redirect('/index_user')
+
+
+
+if __name__ == '__main__':
+    app.run(debug=True)
