@@ -5,11 +5,18 @@ app = Flask(__name__)
 app.secret_key = 'a3d1f49158eea841cdec9975c50345de5212bda95a141ff9'  # Secure random string
 
 # Database configuration
+# db_config = {
+#     'host': '127.0.0.1',
+#     'user': 'root',
+#     'password': 'vd8DYewD@1',
+#     'database': 'hotel_booking'
+# }
+
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': 'vd8DYewD@1',
-    'database': 'hotel_booking'
+    'password': 'monika2/2',
+    'database': 'hotelbooking'
 }
 
 # Function to connect to the database
@@ -121,7 +128,7 @@ def delete_booking(booking_id):
         conn.close()
 
     flash('Booking deleted successfully.')
-    return redirect('/index_user')
+    return redirect('/admin')
 
 
 
