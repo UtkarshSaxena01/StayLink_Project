@@ -5,11 +5,18 @@ app = Flask(__name__)
 app.secret_key = 'a3d1f49158eea841cdec9975c50345de5212bda95a141ff9'  # Secure random string
 
 # Database configuration
+# db_config = {
+#     'host': '127.0.0.1',
+#     'user': 'root',
+#     'password': 'vd8DYewD@1',
+#     'database': 'hotel_booking'
+# }
+
 db_config = {
     'host': '127.0.0.1',
     'user': 'root',
-    'password': 'vd8DYewD@1',
-    'database': 'hotel_booking'
+    'password': 'monika2/2',
+    'database': 'hotelbooking'
 }
 
 # Function to connect to the database
@@ -79,7 +86,7 @@ def logout():
     return redirect('/login')
 
 # ---------------------- BOOKING ROUTES ---------------------- #
-@app.route('/index_user')
+@app.route('/admin')
 def index_user():
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
@@ -108,6 +115,19 @@ def book():
     finally:
         conn.close()
 
+    return redirect('/index_user')
+
+@app.route('/delete_booking/<int:booking_id>', methods=['POST'])
+def delete_booking(booking_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("DELETE FROM bookings WHERE id = %s", (booking_id,))
+        conn.commit()
+    finally:
+        conn.close()
+
+    flash('Booking deleted successfully.')
     return redirect('/index_user')
 
 
