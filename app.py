@@ -108,7 +108,7 @@ def book():
     finally:
         conn.close()
 
-    return redirect('/index_user')
+    return redirect('/admin')
 
 @app.route('/delete_booking/<int:booking_id>', methods=['POST'])
 def delete_booking(booking_id):
